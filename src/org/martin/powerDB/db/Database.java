@@ -104,10 +104,10 @@ public class Database {
      * Crea una tabla en la base de datos.
      * @param name Nombre de la tabla a crear.
      * @param clazz Clase a la que pertenecerán los objetos de esta tabla(Puede ser 
-     * cualquiera).
+     * cualquiera). Esta clase debe implementar la interfaz Serializable.
      * @return true si la tabla se creó con éxito; false en caso de que la tabla
      * ya exista.
-     * @throws IOException En caso de error al guardar la tabla en los archivos.
+     * @throws IOException En caso de error al guardar la tabla en la base de datos.
      */
     public boolean createTable(String name, Class<?> clazz) throws IOException{
         if (getTable(name) != null || getTable(clazz) != null) return false;
@@ -135,18 +135,17 @@ public class Database {
     /**
      * Devuelve el número de objetos almacenados en la tabla
      * especificada por su nombre.
-     * @param name Nombre de la tabla a buscar.
+     * @param tableName Nombre de la tabla a buscar.
      * @return Cantidad de objetos de la tabla en caso de que exista, 
      * en caso contrario arroja una excepcion.
      * @throws org.martin.powerDB.exceptions.TableNotExistsException 
      * En caso de que la tabla no exista.
      */
-    public int getTableCount(String name) throws TableNotExistsException{
-        Table t = getTable(name);
+    public int selectCount(String tableName) throws TableNotExistsException{
+        Table t = getTable(tableName);
         if(t == null) {
-            throw new TableNotExistsException(name);
+            throw new TableNotExistsException(tableName);
         }
-        
         return t.getSerializer().getObjectsCount();
     }
     
