@@ -1,0 +1,1 @@
+1.1 --> se añadió uso de cursores y el motor de almacenamiento ha sido rediseñado.

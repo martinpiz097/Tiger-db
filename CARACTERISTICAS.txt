@@ -1,0 +1,7 @@
+- Base de datos orientada a objetos.
+
+- El motor de almacenamiento se incluye como proyecto extra.
+
+- Manejo de cursores para iterar tablas.
+
+- Operaciones directamente a través de código.
