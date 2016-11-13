@@ -21,6 +21,8 @@ public class TableMetadata {
     private final File fileMetadata;
     private final Properties p;
     
+    // Ver si es mas rapido usar metodos nativos en vez de properties en el
+    // metadata.
     public TableMetadata(File tblFolder) {
         fileMetadata = new File(tblFolder, "metadata.properties");
         p = new Properties();

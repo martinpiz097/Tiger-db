@@ -36,7 +36,8 @@ public class Table<T>{
         sb.append(name);
         sb.append(SEPARATOR);
         
-        tblFolder = new File(sb.toString());
+        tblFolder = new File(SysInfo.ROOT_DIR.getCanonicalPath()+SEPARATOR+relatedDB+SEPARATOR+
+                name+SEPARATOR);
         sb = null;
         
         if(!tblFolder.exists())
@@ -60,6 +61,10 @@ public class Table<T>{
         name = metadata.getTableName();
         objectClazz = (Class<T>) metadata.getTableClass();
         storeManager = new StoreManager<>(objectClazz, tblFolder);
+    }
+
+    public StoreManager<T> getStoreManager() {
+        return storeManager;
     }
 
     public Class<T> getObjectClazz() {

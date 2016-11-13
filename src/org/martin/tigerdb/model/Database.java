@@ -7,6 +7,7 @@ package org.martin.tigerdb.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ import org.martin.tigerdb.exceptions.UnknownTableException;
 public class Database {
     private String name;
     private final File dbFolder;
-    private ElectroList<Table> tables = new ElectroList<>();
+    private final ElectroList<Table> tables = new ElectroList<>();
     
     /**
      * Constructor de clase Database, recibe el nombre de ésta como parámetro
@@ -46,14 +47,14 @@ public class Database {
         if (tblDirs != null) {
             for (int i = 0; i < tblDirs.length; i++) {
                 try {
-                tables.add(new Table(name, tblDirs[i]));
+                    tables.add(new Table(name, tblDirs[i]));
                 } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
     }
-
+    
     /**
      * Evalua si existe una tabla especificada por su nombre.
      * @param tblName Nombre de la tabla a buscar.
@@ -71,6 +72,15 @@ public class Database {
         return !tables.isEmpty();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        dbFolder.renameTo(new File(dbFolder.getParentFile(), name));
+    }
+
     /**
      * Devuelve una tabla de acuerdo al nombre entregado como parámetro para
      * trabajar directamente con ésta y reducir tiempos de validación al hacer
@@ -78,7 +88,7 @@ public class Database {
      * @param name Nombre de la tabla a buscar.
      * @return Objeto Table con los datos de la tabla si es que existe, sino null.
      */
-    public Table getTableBy(String name){
+    public Table getTable(String name){
         return tables.findFirst(t->t.getName().equals(name));
     }
     
@@ -99,7 +109,7 @@ public class Database {
      * UnknownTableException.
      */
     public int selectCountFrom(String tblName){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         return tbl.selectCount();
@@ -131,15 +141,15 @@ public class Database {
      */
     public void insertInto(String tblName, Object object){
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             
             if (tbl == null)
                 throw new UnknownTableException(tblName);
                 
-            else if(!tbl.getObjectClazz().equals(object.getClass()))
+            else if(!tbl.getObjectClazz().isInstance(object))
                     throw new IncompatibleObjectTypeException(
                             tbl.getObjectClazz().getSimpleName()+"!="+object.getClass().getSimpleName());
-            tbl.insert(object);
+            tbl.getStoreManager().addObject(object);
         } catch (IOException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -162,7 +172,7 @@ public class Database {
      */
     public void insertInto(String tblName, Collection collection){
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             
             if (tbl == null)
                 throw new UnknownTableException(tblName);
@@ -180,14 +190,20 @@ public class Database {
      * @return Cursor para acceder a los datos de la tabla especificada.
      */
     public Cursor iterate(String tblName){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         return new Cursor(tbl);
     }
     
+    /**
+     * Devuelve un objeto de una tabla por su índice.
+     * @param tblName
+     * @param index
+     * @return 
+     */
     public Object selectFrom(String tblName, int index){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         
@@ -195,7 +211,7 @@ public class Database {
     }
     
     public ElectroList selectAllFrom(String tblName){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         
@@ -203,14 +219,14 @@ public class Database {
     }
     
     public Object selectFirstFrom(String tblName){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         return tbl.selectFirst();
     }
     
     public Object selectLastFrom(String tblName){
-        Table tbl = getTableBy(tblName);
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         return tbl.selectLast();
@@ -218,7 +234,7 @@ public class Database {
         
     public ElectroList selectFrom(String tblName, String fieldName, Object valueToFind) {
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             return tbl.getObjectsBy(fieldName, valueToFind);
@@ -230,7 +246,7 @@ public class Database {
     
     public void update(String tblName, int index, Object newObject){
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             
@@ -242,7 +258,7 @@ public class Database {
     
     public void update(String tblName, String fieldName, Object valueToFind, Object newObject) {
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             tbl.update(fieldName, valueToFind, newObject);
@@ -253,7 +269,7 @@ public class Database {
     
     public void deleteAllFrom(String tblName) {
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             tbl.deleteAll();
@@ -264,7 +280,7 @@ public class Database {
     
     public void deleteFrom(String tblName, int index) {
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             tbl.deleteAt(index);
@@ -275,7 +291,7 @@ public class Database {
     
     public void deleteFrom(String tblName, String fieldName, Object valueToFind) {
         try {
-            Table tbl = getTableBy(tblName);
+            Table tbl = getTable(tblName);
             if (tbl == null)
                 throw new UnknownTableException(tblName);
             tbl.deleteBy(fieldName, valueToFind);
@@ -284,8 +300,8 @@ public class Database {
         }
     }
     
-    public void dropTableBy(String tblName){
-        Table tbl = getTableBy(tblName);
+    public void dropTable(String tblName){
+        Table tbl = getTable(tblName);
         if (tbl == null)
             throw new UnknownTableException(tblName);
         tbl.drop();

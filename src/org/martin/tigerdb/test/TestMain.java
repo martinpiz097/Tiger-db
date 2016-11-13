@@ -11,6 +11,7 @@ import org.martin.lion.store.StoreManager;
 import org.martin.tigerdb.exceptions.TableAlreadyExistsException;
 import org.martin.tigerdb.model.Database;
 import org.martin.tigerdb.model.Cursor;
+import org.martin.tigerdb.model.Table;
 
 /**
  *
@@ -19,20 +20,44 @@ import org.martin.tigerdb.model.Cursor;
 public class TestMain {
     static long ti, tf;
     
-    public static void main(String[] args) throws TableAlreadyExistsException, IOException {
-        Database dbPersonas = new Database("dbPersonas");
-        //dbPersonas.createTable("persona", Persona.class);
-        System.out.println(dbPersonas.selectCountFrom("persona"));
-        for (int i = 0; i < 10; i++) {
+    public static void main(String[] args) throws IOException {
+        System.out.print("Limit: ");
+        int lim = new java.util.Scanner(System.in).nextInt();
+        
+        start();
+        Database dbPersonas;
+        dbPersonas = new Database("dbPersonas");
+        finish();
+        printMsg("Cargar bd");
+        
+        start();
+        dbPersonas.createTable("persona", Persona.class);
+        finish();
+        printMsg("Crear tabla");
+        
+        start();
+        for (int i = 0; i < lim; i++) {
             dbPersonas.insertInto("persona", new Persona(i, "nom"+i));
         }
-        Cursor cursor = dbPersonas.iterate("persona");
+        finish();
+        printMsg("insert de "+lim+" elementos");
+
+        start();
+        ElectroList<Persona> list = dbPersonas.selectAllFrom("persona");
+        for (Persona p : list) {}
+        finish();
+        printMsg("selectAllFrom");
         
-        int counter = 0;
-        while (cursor.hasNext()) {
-            System.out.println(cursor.next());
-            cursor.remove();
-        }
+        dbPersonas.setName("dbx");
+        start();
+        dbPersonas.dropTable("persona");
+        finish();
+        printMsg("drop table");
+    
+        start();
+        dbPersonas.drop();
+        finish();
+        printMsg("drop database");
     }
     
     public static long currentTime(){
@@ -46,6 +71,10 @@ public class TestMain {
     public static void finish(){
         tf = currentTime();
         tf-=ti;
-        System.out.println(tf);
     }
+    
+    public static void printMsg(String msg){
+        System.out.println(msg+": "+tf);
+    }
+    
 }
