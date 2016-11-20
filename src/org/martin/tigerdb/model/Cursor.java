@@ -15,9 +15,9 @@ import java.util.logging.Logger;
  *
  * @author martin
  */
-public class Cursor<T> implements Iterator<T>{
+public final class Cursor<T> implements Iterator<T>{
     private final Table<T> table;
-    private int cursorIndex;
+    private long cursorIndex;
 
     public Cursor(Table<T> table) {
         this.table = table;
@@ -31,7 +31,7 @@ public class Cursor<T> implements Iterator<T>{
         setPosition(table.selectCount()-1);
     }
     
-    public void setPosition(int position){
+    public void setPosition(long position){
         cursorIndex = position;
     }
     
@@ -52,7 +52,7 @@ public class Cursor<T> implements Iterator<T>{
     
     @Override
     public T next(){
-        return table.selectBy(cursorIndex++);
+        return table.selectBy((int) cursorIndex++);
     }
     
 //    @Override

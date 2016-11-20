@@ -62,6 +62,10 @@ public class Table<T>{
         objectClazz = (Class<T>) metadata.getTableClass();
         storeManager = new StoreManager<>(objectClazz, tblFolder);
     }
+    
+    public boolean isInstance(T obj){
+        return objectClazz.isInstance(obj);
+    }
 
     public StoreManager<T> getStoreManager() {
         return storeManager;
@@ -89,8 +93,23 @@ public class Table<T>{
         storeManager.addObjectsFrom(collection);
     }
 
-    public int selectCount(){
+    public long selectCount(){
         return storeManager.getObjectsCount();
+    }
+    
+    public long selectSumBy(String fieldName){
+        return storeManager.getSumBy(fieldName);
+    }
+    
+    public long selectMaxBy(String fieldName){
+        return storeManager.getMaxBy(fieldName);
+    }
+    public long selectMinBy(String fieldName){
+        return storeManager.getMinBy(fieldName);
+    }
+
+    public double selectAvgBy(String fieldName){
+        return storeManager.getAvgBy(fieldName);
     }
     
     public ElectroList<T> selectAll(){
@@ -126,6 +145,10 @@ public class Table<T>{
             throws UnknownFieldException, IllegalArgumentException, 
             IllegalAccessException, IOException{
         storeManager.setObjects(fieldName, valueToFind, newObject);
+    }
+    
+    public void update(T oldObj, T newObj) throws IOException{
+        storeManager.setObject(oldObj, newObj);
     }
 
     public void deleteAll() throws IOException{
