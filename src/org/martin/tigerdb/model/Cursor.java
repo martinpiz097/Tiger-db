@@ -5,15 +5,13 @@
  */
 package org.martin.tigerdb.model;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author martin
+ * @param <T>
  */
 public final class Cursor<T> implements Iterator<T>{
     private final Table<T> table;

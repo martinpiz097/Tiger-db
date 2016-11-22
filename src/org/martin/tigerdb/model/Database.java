@@ -49,6 +49,10 @@ public class Database {
             loadDB();
         }
 
+    public Database(File parentFolder, String dbName){
+        this(new File(parentFolder, dbName));
+    }
+    
     private void loadDB() {
         File[] tblDirs = dbFolder.listFiles(f->f.isDirectory());
         
@@ -79,6 +83,14 @@ public class Database {
      */
     public boolean hasTables(){
         return !tables.isEmpty();
+    }
+    
+    public String getStorePath(){
+        try {
+            return dbFolder.getCanonicalPath();
+        } catch (IOException ex) {
+            return null;
+        }
     }
 
     public String getName() {
@@ -148,6 +160,13 @@ public class Database {
     public double selectAvgFrom(String tblName, String fieldName){
         Table tbl = getTable(tblName);
         return tbl.selectAvgBy(fieldName);
+    }
+    
+    public void insertTable(Table tbl){
+        if (getTable(tbl.getName()) != null)
+            throw new TableAlreadyExistsException("Ya existe una tabla con el "
+                    + "nombre "+tbl.getName());
+        tables.add(tbl);
     }
     
     /**
@@ -256,6 +275,11 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public Object selectFirstFrom(String tblName, String fieldName, Object valueToFind){
+        Table tbl = getTable(tblName);
+        return tbl.selectFirstBy(fieldName, valueToFind);
     }
     
     public void update(String tblName, int index, Object newObject){

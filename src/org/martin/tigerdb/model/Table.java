@@ -132,6 +132,10 @@ public class Table<T>{
         return storeManager.getObjectBy(fieldName, valueToFind);
     }
     
+    public T selectFirstBy(String fieldName, Object valueToFind){
+        return storeManager.getFirstObjectBy(fieldName, valueToFind);
+    }
+    
     public ElectroList<T> getObjectsBy(String fieldName, Object valueToFind) 
             throws IllegalArgumentException, IllegalAccessException {
         return storeManager.getObjectsBy(fieldName, valueToFind);

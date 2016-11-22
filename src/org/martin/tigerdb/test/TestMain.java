@@ -5,10 +5,13 @@
 // */
 //package org.martin.tigerdb.test;
 //
+//import java.io.File;
 //import java.io.IOException;
 //import org.martin.electroList.structure.ElectroList;
+//import org.martin.lion.store.StoreManager;
 //import org.martin.tigerdb.model.Cursor;
 //import org.martin.tigerdb.model.Database;
+//import org.martin.tigerdb.model.Table;
 //
 ///**
 // *
@@ -17,9 +20,10 @@
 //public class TestMain {
 //    static long ti, tf;
 //    
-//    public static void main(String[] args) {
+//    public static void main(String[] args) throws IOException, ClassNotFoundException {
+//        execTestProblemaLista();
 //        System.out.print("Limit: ");
-//        //int lim = new java.util.Scanner(System.in).nextInt();
+//        int lim = new java.util.Scanner(System.in).nextInt();
 //        
 //        start();
 //        Database dbPersonas;
@@ -34,29 +38,38 @@
 //        finish();
 //        //10printMsg("Crear tabla");
 //        
-////        start();
-////        for (int i = 0; i < lim; i++) {
-////            dbPersonas.insertInto("persona", new Persona(i, "nom"+i));
-////        }
-////        finish();
-////        printMsg("insert de "+lim+" elementos");
+//        start();
+//        for (int i = 0; i < lim; i++)
+//            dbPersonas.insertInto("persona", new Persona(
+//                    (int) (dbPersonas.selectCountFrom("persona")+1), "nom"+i));
+//        
+//        finish();
+//        printMsg("insert de "+lim+" elementos");
 //        
 //        System.out.println("Max: "+dbPersonas.selectMaxFrom("persona", "edad"));
 //        System.out.println("Min: "+dbPersonas.selectMinFrom("persona", "edad"));
 //        System.out.println("Sum: "+dbPersonas.selectSumFrom("persona", "edad"));
 //        System.out.println("Avg: "+dbPersonas.selectAvgFrom("persona", "edad"));
-//        System.exit(0);
-//        Cursor cursor = dbPersonas.getCursorFrom("persona");
-//        while (cursor.hasNext()) {
-//            System.out.println(cursor.next());
-//        }
-//        System.exit(0);
+////        Cursor cursor = dbPersonas.getCursorFrom("persona");
+////        while (cursor.hasNext()) {
+////            System.out.println(cursor.next());
+////        }
+//
+//        Persona selectFirstFrom = (Persona) dbPersonas.selectFirstFrom("persona");
+//        System.out.println("Select first: "+selectFirstFrom);
+//        Persona first = (Persona) dbPersonas.selectFirstFrom("persona", "name", "nom4");
+//        System.out.println("First search: "+first);
+//        
 //        
 //        start();
 //        ElectroList<Persona> list = dbPersonas.selectAllFrom("persona");
-//        for (Persona p : list) {}
+//        for (Persona p : list) {
+//            System.out.println(p);
+//        }
 //        finish();
 //        printMsg("selectAllFrom");
+//
+//        long selectMaxFrom = dbPersonas.selectMaxFrom("persona", "name");
 //        
 //        dbPersonas.setName("dbx");
 //        start();
@@ -85,6 +98,33 @@
 //    
 //    public static void printMsg(String msg){
 //        System.out.println(msg+": "+tf);
+//    }
+//
+//    private static void execTestProblemaLista() throws IOException, ClassNotFoundException {
+//        Database db = new Database("dbPersonas");
+//    
+//        Table<Persona> tbl1 = db.getTable("persona");
+//        
+//        tbl1.insert(new Persona(1, "nom1"));
+//        tbl1.insert(new Persona(2, "nom2"));
+//        tbl1.insert(new Persona(3, "nom3"));
+//        
+//        Table tbl2 = db.getTable("persona");
+//        
+////        ElectroList<Persona> selectAll = db.selectAllFrom("persona");
+////        ElectroList<Persona> selectTblGen = tbl1.selectAll();
+////        ElectroList selectTblO = tbl2.selectAll();
+////        ElectroList<Persona> objectsStoreGen = tbl1.getStoreManager().getObjects();
+////        ElectroList<Persona> objectsStoreO = tbl2.getStoreManager().getObjects();
+////        StoreManager<Persona> store = new StoreManager<>(Persona.class, new File(db.getStorePath(), "persona"));
+////        
+////        System.out.println("ListDB: "+selectAll);
+////        System.out.println("ListTblGeneric: "+selectTblGen);
+////        System.out.println("ListTblObject: "+selectTblO);
+////        System.out.println("ListStoreGen: "+objectsStoreGen);
+////        System.out.println("ListStoreObject: "+objectsStoreO);
+////        System.out.println("ListStorePuro: "+store.getObjects());
+//        Persona selectFirst = (Persona) db.selectFirstFrom("persona", "name", "nom1");
 //    }
 //    
 //}
