@@ -23,7 +23,7 @@ import org.martin.tigerdb.exceptions.UnknownTableException;
  */
 public class Database {
     private String name;
-    private final File dbFolder;
+    private File dbFolder;
     private final ElectroList<Table> tables = new ElectroList<>();
 
     /**
@@ -47,7 +47,7 @@ public class Database {
             dbFolder.mkdirs();
         else
             loadDB();
-        }
+    }
 
     public Database(File parentFolder, String dbName){
         this(new File(parentFolder, dbName));
@@ -85,6 +85,16 @@ public class Database {
         return !tables.isEmpty();
     }
     
+    /**
+     * Evalua si la tabla solicitada por su nombre está vacia (no tiene registros).
+     * @param tblName Nombre de la tabla solicitada
+     * @return true si la tabla está vacía; false en caso contrario.
+     */
+    public boolean isTableEmpty(String tblName){
+        Table tbl = getTable(tblName);
+        return tbl.isEmpty();
+    }
+    
     public String getStorePath(){
         try {
             return dbFolder.getCanonicalPath();
@@ -93,13 +103,19 @@ public class Database {
         }
     }
 
+    public File getStoreFolder(){
+        return dbFolder;
+    }
+    
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-        dbFolder.renameTo(new File(dbFolder.getParentFile(), name));
+        File newFolder = new File(dbFolder.getParentFile(), name);
+        dbFolder.renameTo(newFolder);
+        dbFolder = newFolder;
     }
 
     /**
@@ -147,6 +163,14 @@ public class Database {
         return tbl.selectSumBy(fieldName);
     }
     
+    /**
+     * Entrega el mayor valor númerico comparando los valores
+     * de un campo específico
+     * @param tblName Nombre de la tabla objetivo.
+     * @param fieldName Nombre del campo numérico objetivo.
+     * @return El valor máximo devuelto.
+     */
+    
     public long selectMaxFrom(String tblName, String fieldName){
         Table tbl = getTable(tblName);
         return tbl.selectMaxBy(fieldName);
@@ -162,6 +186,11 @@ public class Database {
         return tbl.selectAvgBy(fieldName);
     }
     
+    /**
+     * Agrega una nueva tabla a la base de datos (Lanza una excepción en
+     * tiempo de ejecución si el nombre de la tabla ya existe).
+     * @param tbl Objeto del tipo Table a agregar.
+     */
     public void insertTable(Table tbl){
         if (getTable(tbl.getName()) != null)
             throw new TableAlreadyExistsException("Ya existe una tabla con el "
@@ -180,7 +209,7 @@ public class Database {
             if (hasTable(tblName))
                 throw new TableAlreadyExistsException(tblName);
             
-            tables.add(new Table(tblName, clazz, this.name));
+            tables.add(new Table(tblName, clazz, dbFolder));
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -350,6 +379,14 @@ public class Database {
     public void drop(){
         dropAllTables();
         dbFolder.delete();
+    }
+    
+    public void showTables(){
+        System.out.println("Cantidad de tablas: "+tables.size());
+        System.out.println("-------------------------");
+        for (Table table : tables)
+            table.show();
+        
     }
     
 }

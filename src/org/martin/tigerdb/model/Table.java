@@ -26,6 +26,9 @@ public class Table<T>{
     private final TableMetadata metadata;
     private final StoreManager<T> storeManager;
     
+    // Arreglar problema de que cuando intento crear bases de datos en 
+    // rutas externas necesito otro constructor para que el metadata
+    // no me arroje FileNotFoundException.
     public Table(String name, Class<T> objectClazz, String relatedDB) 
             throws IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
@@ -36,15 +39,14 @@ public class Table<T>{
         sb.append(name);
         sb.append(SEPARATOR);
         
-        tblFolder = new File(SysInfo.ROOT_DIR.getCanonicalPath()+SEPARATOR+relatedDB+SEPARATOR+
-                name+SEPARATOR);
+        tblFolder = new File(sb.toString());
         sb = null;
         
         if(!tblFolder.exists())
             tblFolder.mkdir();
         this.name = name;
         this.objectClazz = objectClazz;
-        
+
         metadata = new TableMetadata(tblFolder);
         metadata.setTableName(name);
         metadata.setTableClass(objectClazz);
@@ -62,9 +64,30 @@ public class Table<T>{
         objectClazz = (Class<T>) metadata.getTableClass();
         storeManager = new StoreManager<>(objectClazz, tblFolder);
     }
+
+    public Table(String tblName, Class<T> objectClazz, File dbFolder) 
+            throws IOException, ClassNotFoundException {
+        tblFolder = new File(dbFolder, tblName);
+        
+        if(!tblFolder.exists())
+            tblFolder.mkdir();
+        this.name = tblName;
+        this.objectClazz = (Class<T>) objectClazz;
+
+        metadata = new TableMetadata(tblFolder);
+        metadata.setTableName(name);
+        metadata.setTableClass(objectClazz);
+        
+        this.relatedDb = dbFolder.getName();
+        storeManager = new StoreManager<>(objectClazz, tblFolder);
+    }
     
     public boolean isInstance(T obj){
         return objectClazz.isInstance(obj);
+    }
+    
+    public boolean isEmpty(){
+        return selectCount() == 0;
     }
 
     public StoreManager<T> getStoreManager() {
@@ -173,6 +196,13 @@ public class Table<T>{
         storeManager.deleteFile();
         metadata.deleteFile();
         tblFolder.delete();
+    }
+
+    public void show(){
+        System.out.println("Tabla: "+name);
+        System.out.println("Clase: "+objectClazz.getName());
+        System.out.println("Cantidad de registros: "+selectCount());
+        System.out.println("-------------------------");
     }
     
 }

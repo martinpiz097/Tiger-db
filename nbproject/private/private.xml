@@ -13,18 +13,21 @@
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/powerdb/src/org/martin/powerdb/test/TestMain.java</file>
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/powerdb/src/org/martin/powerdb/store/streams/OIS.java</file>
         </group>
-        <group name="powerDB">
-            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Database.java</file>
-            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/test/TestMain.java</file>
-            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/TableMetadata.java</file>
-            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/test/Persona.java</file>
-            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Table.java</file>
-        </group>
         <group name="jConsulta">
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Database.java</file>
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/test/TestMain.java</file>
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Cursor.java</file>
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/test/Persona.java</file>
+            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Table.java</file>
+        </group>
+        <group name="Java WEB">
+            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Database.java</file>
+            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Table.java</file>
+        </group>
+        <group name="powerDB"/>
+        <group name="tigerdb">
+            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Database.java</file>
+            <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/test/TestMain.java</file>
             <file>file:/home/martin/Dropbox/Java/Proyectos/NetBeansProjects/tigerdb/src/org/martin/tigerdb/model/Table.java</file>
         </group>
     </open-files>
