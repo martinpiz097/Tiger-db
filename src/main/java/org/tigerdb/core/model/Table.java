@@ -8,12 +8,12 @@ package org.tigerdb.core.model;
 import org.mpizutil.electrolist.structure.ElectroList;
 import org.tigerdb.bridge.StoreManager;
 import org.tigerdb.core.bridgeconnect.TigerStorer;
-import org.tigerdb.lion.exceptions.UnknownFieldException;
 import org.tigerdb.lion.store.LionStoreManager;
 import org.tigerdb.lion.system.SysInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class Table<T>{
     private String name;
     private final Class<T> objectClazz;
     private final TableMetadata metadata;
-    private final StoreManager<T> storeManager;
+    private StoreManager<T> storeManager;
     
     // Arreglar problema de que cuando intento crear bases de datos en 
     // rutas externas necesito otro constructor para que el metadata
@@ -56,7 +56,17 @@ public class Table<T>{
         metadata.setTableClass(objectClazz);
         
         this.relatedDb = relatedDB;
-        storeManager = TigerStorer.getStoreManager(this, tblFolder);
+        try {
+            storeManager = TigerStorer.getStoreManager(this, tblFolder);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     public Table(String relatedDb, File tblFolder) 
@@ -66,7 +76,17 @@ public class Table<T>{
         metadata = new TableMetadata(tblFolder);
         name = metadata.getTableName();
         objectClazz = (Class<T>) metadata.getTableClass();
-        storeManager = TigerStorer.getStoreManager(objectClazz, tblFolder);
+        try {
+            storeManager = TigerStorer.getStoreManager(objectClazz, tblFolder);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public Table(String tblName, Class<T> objectClazz, File dbFolder) 

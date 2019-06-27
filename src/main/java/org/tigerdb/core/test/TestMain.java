@@ -8,6 +8,7 @@ package org.tigerdb.core.test;
 import org.mpizutil.electrolist.structure.ElectroList;
 import org.tigerdb.core.model.Database;
 import org.tigerdb.core.model.Table;
+import org.tigerdb.lion.store.LionStoreManager;
 
 import java.io.IOException;
 
