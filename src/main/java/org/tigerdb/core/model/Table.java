@@ -66,7 +66,7 @@ public class Table<T>{
         metadata = new TableMetadata(tblFolder);
         name = metadata.getTableName();
         objectClazz = (Class<T>) metadata.getTableClass();
-        storeManager = new LionStoreManager<>(objectClazz, tblFolder);
+        storeManager = TigerStorer.getStoreManager(objectClazz, tblFolder);
     }
 
     public Table(String tblName, Class<T> objectClazz, File dbFolder) 

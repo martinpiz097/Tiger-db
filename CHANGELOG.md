@@ -27,3 +27,6 @@
 - 2.1
     - Se aplica estandar tiger-bridge para asociar proyecto con 
     gestor de almacenamiento
+    
+- 2.1.1
+    - Correcciones menores
