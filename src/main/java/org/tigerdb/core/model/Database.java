@@ -125,8 +125,8 @@ public class Database {
      * @param tblName Nombre de la tabla a buscar.
      * @return Objeto Table con los datos de la tabla si es que existe, sino null.
      */
-    public Table getTable(String tblName){
-        Table tbl = tables.findFirst(t->t.getName().equals(tblName));
+    public <T> Table<T> getTable(String tblName){
+        Table<T> tbl = tables.findFirst(t->t.getName().equals(tblName));
         if (tbl == null)
             throw new UnknownTableException(tblName);
         return tbl;
@@ -281,14 +281,14 @@ public class Database {
         return tbl.selectBy(index);
     }
     
-    public ElectroList selectAllFrom(String tblName){
+    public <T> ElectroList<T> selectAllFrom(String tblName){
         Table tbl = getTable(tblName);
         return tbl.selectAll();
     }
-    
-    public Object selectFirstFrom(String tblName){
+
+    public <T> T selectFirstFrom(String tblName){
         Table tbl = getTable(tblName);
-        return tbl.selectFirst();
+        return (T) tbl.selectFirst();
     }
     
     public Object selectLastFrom(String tblName){
@@ -300,7 +300,7 @@ public class Database {
         try {
             Table tbl = getTable(tblName);
             return tbl.getObjectsBy(fieldName, valueToFind);
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -309,6 +309,11 @@ public class Database {
     public Object selectFirstFrom(String tblName, String fieldName, Object valueToFind){
         Table tbl = getTable(tblName);
         return tbl.selectFirstBy(fieldName, valueToFind);
+    }
+
+    public <T> T selectFirstFrom(String tblName, String fieldName, Object valueToFind, Class<T> clazz){
+        Table tbl = getTable(tblName);
+        return clazz.cast(tbl.selectFirstBy(fieldName, valueToFind));
     }
     
     public void update(String tblName, int index, Object newObject){
@@ -324,7 +329,7 @@ public class Database {
         try {
             Table tbl = getTable(tblName);
             tbl.update(fieldName, valueToFind, newObject);
-        } catch (IllegalArgumentException | IllegalAccessException | IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -360,7 +365,7 @@ public class Database {
         try {
             Table tbl = getTable(tblName);
             tbl.deleteBy(fieldName, valueToFind);
-        } catch (UnknownFieldException | IllegalArgumentException | IllegalAccessException | IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

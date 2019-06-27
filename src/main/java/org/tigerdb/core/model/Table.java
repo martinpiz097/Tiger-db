@@ -6,13 +6,16 @@
 package org.tigerdb.core.model;
 
 import org.mpizutil.electrolist.structure.ElectroList;
+import org.tigerdb.bridge.StoreManager;
+import org.tigerdb.core.bridgeconnect.TigerStorer;
 import org.tigerdb.lion.exceptions.UnknownFieldException;
-import org.tigerdb.lion.store.StoreManager;
+import org.tigerdb.lion.store.LionStoreManager;
 import org.tigerdb.lion.system.SysInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -53,7 +56,7 @@ public class Table<T>{
         metadata.setTableClass(objectClazz);
         
         this.relatedDb = relatedDB;
-        storeManager = new StoreManager<>(objectClazz, tblFolder);
+        storeManager = TigerStorer.getStoreManager(this, tblFolder);
     }
 
     public Table(String relatedDb, File tblFolder) 
@@ -63,7 +66,7 @@ public class Table<T>{
         metadata = new TableMetadata(tblFolder);
         name = metadata.getTableName();
         objectClazz = (Class<T>) metadata.getTableClass();
-        storeManager = new StoreManager<>(objectClazz, tblFolder);
+        storeManager = new LionStoreManager<>(objectClazz, tblFolder);
     }
 
     public Table(String tblName, Class<T> objectClazz, File dbFolder) 
@@ -73,14 +76,14 @@ public class Table<T>{
         if(!tblFolder.exists())
             tblFolder.mkdir();
         this.name = tblName;
-        this.objectClazz = (Class<T>) objectClazz;
+        this.objectClazz = objectClazz;
 
         metadata = new TableMetadata(tblFolder);
         metadata.setTableName(name);
         metadata.setTableClass(objectClazz);
         
         this.relatedDb = dbFolder.getName();
-        storeManager = new StoreManager<>(objectClazz, tblFolder);
+        storeManager = new LionStoreManager<>(objectClazz, tblFolder);
     }
     
     public boolean isInstance(T obj){
@@ -137,7 +140,11 @@ public class Table<T>{
     }
     
     public ElectroList<T> selectAll(){
-        return storeManager.getObjects();
+        List<T> objects = storeManager.getObjects();
+        if (objects instanceof ElectroList)
+            return (ElectroList<T>) objects;
+        else
+            return new ElectroList<>(objects);
     }
 
     public T selectFirst(){
@@ -152,26 +159,29 @@ public class Table<T>{
         return storeManager.getObjectBy(index);
     }
     
-    public T selectBy(String fieldName, Object valueToFind) throws IllegalArgumentException, IllegalAccessException, UnknownFieldException{
+    public T selectBy(String fieldName, Object valueToFind) throws Exception {
         return storeManager.getObjectBy(fieldName, valueToFind);
     }
     
     public T selectFirstBy(String fieldName, Object valueToFind){
         return storeManager.getFirstObjectBy(fieldName, valueToFind);
     }
-    
+
     public ElectroList<T> getObjectsBy(String fieldName, Object valueToFind)
-            throws IllegalArgumentException, IllegalAccessException {
-        return storeManager.getObjectsBy(fieldName, valueToFind);
+            throws Exception {
+        List<T> objectsBy = storeManager.getObjectsBy(fieldName, valueToFind);
+        if (objectsBy instanceof ElectroList)
+            return (ElectroList<T>) objectsBy;
+        else
+            return new ElectroList<>(objectsBy);
     }
     
     public void update(int index, T newObject) throws IOException{
         storeManager.setObject(index, newObject);
     }
 
-    public void update(String fieldName, Object valueToFind, T newObject) 
-            throws UnknownFieldException, IllegalArgumentException,
-            IllegalAccessException, IOException{
+    public void update(String fieldName, Object valueToFind, T newObject)
+            throws Exception {
         storeManager.setObjects(fieldName, valueToFind, newObject);
     }
     
@@ -187,14 +197,13 @@ public class Table<T>{
         storeManager.deleteObject(index);
     }
     
-    public void deleteBy(String fieldName, Object valueToFind) 
-            throws UnknownFieldException, IllegalArgumentException, 
-            IllegalAccessException, IOException{
+    public void deleteBy(String fieldName, Object valueToFind)
+            throws Exception {
         storeManager.deleteObjectsBy(fieldName, valueToFind);
     }
     
     public void drop(){
-        storeManager.deleteFile();
+        storeManager.deleteRecordFile();
         metadata.deleteFile();
         tblFolder.delete();
     }

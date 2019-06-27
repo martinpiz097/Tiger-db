@@ -8,7 +8,6 @@ package org.tigerdb.core.test;
 import org.mpizutil.electrolist.structure.ElectroList;
 import org.tigerdb.core.model.Database;
 import org.tigerdb.core.model.Table;
-import org.tigerdb.lion.store.StoreManager;
 
 import java.io.IOException;
 
@@ -18,8 +17,8 @@ import java.io.IOException;
  */
 public class TestMain {
     static long ti, tf;
-    
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+    public static void main(String[] args) throws Exception {
         //execAddComparator();
         System.out.print("Limit: ");
         int lim = new java.util.Scanner(System.in).nextInt();
@@ -125,7 +124,7 @@ public class TestMain {
         Persona selectFirst = (Persona) db.selectFirstFrom("persona", "name", "nom1");
     }
     
-    private static void execAddComparator() throws IOException{
+    /*private static void execAddComparator() throws IOException{
         final String TBL_NAME = "persona";
         System.out.print("Limit: ");
         int lim = new java.util.Scanner(System.in).nextInt();
@@ -133,8 +132,9 @@ public class TestMain {
         Database db = new Database("db2");
         if(!db.hasTable(TBL_NAME))
             db.createTable(TBL_NAME, Persona.class);
-            
-        StoreManager<Persona> store = db.getTable(TBL_NAME).getStoreManager();
+
+        StoreManager<Persona> store = (StoreManager<Persona>)
+                    db.getTable(TBL_NAME).getStoreManager();
         
         start();
         for (int i = 0; i < lim; i++) {
@@ -156,6 +156,6 @@ public class TestMain {
  
         store.deleteAllObjects();
         System.exit(0);
-    }
+    }*/
     
 }
