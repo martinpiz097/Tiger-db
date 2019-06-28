@@ -42,9 +42,9 @@ public class TableMetadata {
         saveFile();
     }
     
-    public Class<?> getTableClass(){
+    public <T> Class<T> getTableClass(){
         try {
-            return Class.forName(p.getProperty("tblClass"));
+            return (Class<T>) Class.forName(p.getProperty("tblClass"));
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(TableMetadata.class.getName()).log(Level.SEVERE, null, ex);
         }

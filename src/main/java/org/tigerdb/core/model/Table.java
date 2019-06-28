@@ -58,9 +58,7 @@ public class Table<T>{
         this.relatedDb = relatedDB;
         try {
             storeManager = TigerStorer.getStoreManager(this, tblFolder);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (NoSuchMethodException | InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -70,12 +68,12 @@ public class Table<T>{
     }
 
     public Table(String relatedDb, File tblFolder) 
-            throws IOException, ClassNotFoundException {
+            throws ClassNotFoundException {
         this.relatedDb = relatedDb;
         this.tblFolder = tblFolder;
         metadata = new TableMetadata(tblFolder);
         name = metadata.getTableName();
-        objectClazz = (Class<T>) metadata.getTableClass();
+        objectClazz = metadata.getTableClass();
         try {
             storeManager = TigerStorer.getStoreManager(objectClazz, tblFolder);
         } catch (InvocationTargetException e) {
@@ -112,6 +110,10 @@ public class Table<T>{
     
     public boolean isEmpty(){
         return selectCount() == 0;
+    }
+
+    public String getRelatedDb() {
+        return relatedDb;
     }
 
     public StoreManager<T> getStoreManager() {
@@ -228,7 +230,7 @@ public class Table<T>{
         tblFolder.delete();
     }
 
-    public void show(){
+    void show(){
         System.out.println("Tabla: "+name);
         System.out.println("Clase: "+objectClazz.getName());
         System.out.println("Cantidad de registros: "+selectCount());

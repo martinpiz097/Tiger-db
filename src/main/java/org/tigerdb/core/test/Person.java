@@ -11,21 +11,21 @@ import java.io.Serializable;
  *
  * @author martin
  */
-public class Persona implements Serializable{
-    private int edad;
+public class Person implements Serializable{
+    private int age;
     private String name;
 
-    public Persona(int edad, String name) {
-        this.edad = edad;
+    public Person(int age, String name) {
+        this.age = age;
         this.name = name;
     }
 
-    public int getEdad() {
-        return edad;
+    public int getAge() {
+        return age;
     }
 
-    public void setEdad(int edad) {
-        this.edad = edad;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public class Persona implements Serializable{
 
     @Override
     public String toString() {
-        return "Persona{" + "edad=" + edad + ", name=" + name + '}';
+        return "Person{" + "age=" + age + ", name=" + name + '}';
     }
         
 }

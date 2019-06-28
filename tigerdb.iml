@@ -11,8 +11,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="lion" />
     <orderEntry type="library" name="Maven: org.mpizutil:electrolist:2.0" level="project" />
-    <orderEntry type="module" module-name="tiger-bridge" />
+    <orderEntry type="library" name="Maven: org.tigerdb:lion:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.tigerdb:tiger-bridge:0.1" level="project" />
   </component>
 </module>

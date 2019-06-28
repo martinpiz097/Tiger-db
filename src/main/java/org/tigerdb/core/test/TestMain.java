@@ -31,14 +31,14 @@ public class TestMain {
         
         start();
         if (!dbPersonas.hasTable("persona"))
-            dbPersonas.createTable("persona", Persona.class);
+            dbPersonas.createTable("persona", Person.class);
         
         finish();
         //10printMsg("Crear tabla");
         
         start();
         for (int i = 0; i < lim; i++)
-            dbPersonas.insertInto("persona", new Persona(
+            dbPersonas.insertInto("persona", new Person(
                     (int) (dbPersonas.selectCountFrom("persona")+1), "nom"+i));
         
         finish();
@@ -53,15 +53,15 @@ public class TestMain {
 //            System.out.println(cursor.next());
 //        }
 
-        Persona selectFirstFrom = (Persona) dbPersonas.selectFirstFrom("persona");
+        Person selectFirstFrom = (Person) dbPersonas.selectFirstFrom("persona");
         System.out.println("Select first: "+selectFirstFrom);
-        Persona first = (Persona) dbPersonas.selectFirstFrom("persona", "name", "nom4");
+        Person first = (Person) dbPersonas.selectFirstFrom("persona", "name", "nom4");
         System.out.println("First search: "+first);
         
         
         start();
-        ElectroList<Persona> list = dbPersonas.selectAllFrom("persona");
-        for (Persona p : list) {
+        ElectroList<Person> list = dbPersonas.selectAllFrom("persona");
+        for (Person p : list) {
             System.out.println(p);
         }
         finish();
@@ -100,20 +100,20 @@ public class TestMain {
     private static void execTestProblemaLista() throws IOException, ClassNotFoundException {
         Database db = new Database("dbPersonas");
     
-        Table<Persona> tbl1 = db.getTable("persona");
+        Table<Person> tbl1 = db.getTable("persona");
         
-        tbl1.insert(new Persona(1, "nom1"));
-        tbl1.insert(new Persona(2, "nom2"));
-        tbl1.insert(new Persona(3, "nom3"));
+        tbl1.insert(new Person(1, "nom1"));
+        tbl1.insert(new Person(2, "nom2"));
+        tbl1.insert(new Person(3, "nom3"));
         
         Table tbl2 = db.getTable("persona");
         
-//        ElectroList<Persona> selectAll = db.selectAllFrom("persona");
-//        ElectroList<Persona> selectTblGen = tbl1.selectAll();
+//        ElectroList<Person> selectAll = db.selectAllFrom("persona");
+//        ElectroList<Person> selectTblGen = tbl1.selectAll();
 //        ElectroList selectTblO = tbl2.selectAll();
-//        ElectroList<Persona> objectsStoreGen = tbl1.getStoreManager().getObjects();
-//        ElectroList<Persona> objectsStoreO = tbl2.getStoreManager().getObjects();
-//        StoreManager<Persona> store = new StoreManager<>(Persona.class, new File(db.getStorePath(), "persona"));
+//        ElectroList<Person> objectsStoreGen = tbl1.getStoreManager().getObjects();
+//        ElectroList<Person> objectsStoreO = tbl2.getStoreManager().getObjects();
+//        StoreManager<Person> store = new StoreManager<>(Person.class, new File(db.getStorePath(), "persona"));
 //        
 //        System.out.println("ListDB: "+selectAll);
 //        System.out.println("ListTblGeneric: "+selectTblGen);
@@ -121,7 +121,7 @@ public class TestMain {
 //        System.out.println("ListStoreGen: "+objectsStoreGen);
 //        System.out.println("ListStoreObject: "+objectsStoreO);
 //        System.out.println("ListStorePuro: "+store.getObjects());
-        Persona selectFirst = (Persona) db.selectFirstFrom("persona", "name", "nom1");
+        Person selectFirst = (Person) db.selectFirstFrom("persona", "name", "nom1");
     }
     
     /*private static void execAddComparator() throws IOException{
@@ -131,14 +131,14 @@ public class TestMain {
         
         Database db = new Database("db2");
         if(!db.hasTable(TBL_NAME))
-            db.createTable(TBL_NAME, Persona.class);
+            db.createTable(TBL_NAME, Person.class);
 
-        StoreManager<Persona> store = (StoreManager<Persona>)
+        StoreManager<Person> store = (StoreManager<Person>)
                     db.getTable(TBL_NAME).getStoreManager();
         
         start();
         for (int i = 0; i < lim; i++) {
-            store.addObject(new Persona(i, "nom"+i));
+            store.addObject(new Person(i, "nom"+i));
         }
         finish();
         printMsg("addNormal");
@@ -148,7 +148,7 @@ public class TestMain {
         
         start();
         for (int i = 0; i < lim; i++) {
-            store.addObject(new Persona(i, "nom"+i));
+            store.addObject(new Person(i, "nom"+i));
         }
         finish();
         printMsg("addParallel");

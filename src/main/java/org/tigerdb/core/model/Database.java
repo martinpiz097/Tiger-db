@@ -60,7 +60,7 @@ public class Database {
             for (int i = 0; i < tblDirs.length; i++) {
                 try {
                     tables.add(new Table(name, tblDirs[i]));
-                } catch (IOException | ClassNotFoundException ex) {
+                } catch (ClassNotFoundException ex) {
                     Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -265,8 +265,7 @@ public class Database {
      * @return Cursor para acceder a los datos de la tabla especificada.
      */
     public Cursor iterate(String tblName){
-        Table tbl = getTable(tblName);
-        return new Cursor(tbl);
+        return getCursorFrom(tblName);
     }
     
     /**

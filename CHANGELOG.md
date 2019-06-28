@@ -35,3 +35,7 @@
     - Se externaliza la configuracion del gestor de almacenamiento a utilizar,
     ahora se modifica un archivo externo indicando el nombre completo
     de la clase que extiende de StoreManager
+    
+- 2.2.1
+    - Correcciones en redundancia de codigo
+    
