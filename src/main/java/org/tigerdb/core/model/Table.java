@@ -9,7 +9,7 @@ import org.mpizutil.electrolist.structure.ElectroList;
 import org.tigerdb.bridge.StoreManager;
 import org.tigerdb.core.bridgeconnect.TigerStorer;
 import org.tigerdb.lion.store.LionStoreManager;
-import org.tigerdb.lion.system.SysInfo;
+import org.tigerdb.core.system.SysInfo;
 
 import java.io.File;
 import java.io.IOException;

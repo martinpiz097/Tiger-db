@@ -3,7 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.tigerdb</groupId>
   <artifactId>tigerdb</artifactId>
-  <version>2.1.1</version>
+  <name>tigerdb</name>
+  <version>2.2</version>
   <build>
     <plugins>
       <plugin>

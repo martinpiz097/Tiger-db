@@ -30,3 +30,8 @@
     
 - 2.1.1
     - Correcciones menores
+    
+- 2.2
+    - Se externaliza la configuracion del gestor de almacenamiento a utilizar,
+    ahora se modifica un archivo externo indicando el nombre completo
+    de la clase que extiende de StoreManager

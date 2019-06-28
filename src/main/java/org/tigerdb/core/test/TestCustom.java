@@ -8,6 +8,9 @@ import java.util.List;
 public class TestCustom {
     public static void main(String[] args) {
         Database db = new Database("dbmartin");
+        if (!db.hasTable("personas"))
+            db.createTable("personas", Persona.class);
+
         Table<Persona> personas = db.getTable("personas");
         System.out.println(personas.selectCount());
 

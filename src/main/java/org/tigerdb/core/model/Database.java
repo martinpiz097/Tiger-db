@@ -14,8 +14,7 @@ import org.mpizutil.electrolist.structure.ElectroList;
 import org.tigerdb.core.exceptions.IncompatibleObjectTypeException;
 import org.tigerdb.core.exceptions.TableAlreadyExistsException;
 import org.tigerdb.core.exceptions.UnknownTableException;
-import org.tigerdb.lion.exceptions.UnknownFieldException;
-import org.tigerdb.lion.system.SysInfo;
+import org.tigerdb.core.system.SysInfo;
 
 /**
  *

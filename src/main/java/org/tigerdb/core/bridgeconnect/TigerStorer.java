@@ -5,13 +5,12 @@ import org.tigerdb.core.model.Table;
 import org.tigerdb.lion.store.LionStoreManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class TigerStorer {
+import static org.tigerdb.core.system.SysInfo.STORER_CLASS_NAME;
 
-    public static final String STORER_CLASS_NAME = LionStoreManager.class.getName();
+public class TigerStorer {
 
     private static Constructor getStorerBuilder(
             Class<? extends StoreManager> clazz) throws NoSuchMethodException {
