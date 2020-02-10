@@ -75,18 +75,10 @@ public class DatabaseTest {
 
     @Test
     public void createDatabaseTimeTest() throws Throwable {
-        Stopwatch stopwatch = getDefaultStopwatch();
-
-        Statement statement = getStatement(()  -> {
+        CallbackTask task = ()  -> {
             Database database = new Database(DB_NAME);
-        });
-
-        Description description = Description.createSuiteDescription(DatabaseTest.class);
-        stopwatch.apply(statement, description).evaluate();
-
-        double time = TimeUtil.millisToSeconds(stopwatch.runtime(TimeUnit.MILLISECONDS));
-        logger.info("Creation Time: "+time);
-        assertTrue(time < 1000);
+        };
+        executeTask(task);
     }
 
     @Test
